@@ -40,20 +40,15 @@ def get_db_config():
             'password': db['password']
         }
     except Exception as e:
-        # Local development: check for .streamlit/secrets.toml
-        import os
-        secrets_path = os.path.join(os.path.dirname(__file__), '.streamlit', 'secrets.toml')
-        if not os.path.exists(secrets_path):
-            st.error("Veritabani yapilandirmasi bulunamadi!")
-            st.info("Lutfen .streamlit/secrets.toml dosyasini olusturun veya Streamlit Cloud'da Secrets ekleyin.")
-            st.code("""[database]
+        st.error(f"Veritabani yapilandirmasi hatasi: {str(e)}")
+        st.info("Lutfen Streamlit Cloud'da Secrets ekleyin veya .streamlit/secrets.toml dosyasini olusturun.")
+        st.code("""[database]
 server = "sunucu_adresi,port"
 database = "veritabani_adi"
 username = "kullanici_adi"
 password = "sifre"
 """, language="toml")
-            return None
-        raise e
+        return None
 
 # Tüm ligler
 FULL_STATS_LEAGUES = [

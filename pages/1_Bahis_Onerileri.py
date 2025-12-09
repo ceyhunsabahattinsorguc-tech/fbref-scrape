@@ -35,13 +35,9 @@ def get_db_config():
             'password': db['password']
         }
     except Exception as e:
-        import os
-        secrets_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.streamlit', 'secrets.toml')
-        if not os.path.exists(secrets_path):
-            st.error("Veritabani yapilandirmasi bulunamadi!")
-            st.info("Lutfen .streamlit/secrets.toml dosyasini olusturun.")
-            return None
-        raise e
+        st.error(f"Veritabani yapilandirmasi hatasi: {str(e)}")
+        st.info("Lutfen Streamlit Cloud'da Secrets ekleyin.")
+        return None
 
 
 def get_db_connection():
