@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  fbref-api:
+    build: .
+    container_name: fbref-api
+    ports:
+      - "5100:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__FbrefDb=Server=sqlserver;Database=FBREF;User Id=sa;Password=FbRef2024Str0ng;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+    restart: unless-stopped
+    networks:
+      - fbref-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: fbref-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=FbRef2024Str0ng
+    ports:
+      - "1434:1433"
+    volumes:
+      - fbref-sqldata:/var/opt/mssql
+    restart: unless-stopped
+    networks:
+      - fbref-network
+
+networks:
+  fbref-network:
+    driver: bridge
+
+volumes:
+  fbref-sqldata:

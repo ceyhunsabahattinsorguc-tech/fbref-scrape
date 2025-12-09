@@ -38,6 +38,9 @@ SUMMARY_LEAGUES = [
     {"lig_id": 28, "name": "Veikkausliiga", "comp_id": 61, "url_name": "Veikkausliiga", "country": "FİNLANDİYA"},
     {"lig_id": 29, "name": "Eliteserien", "comp_id": 28, "url_name": "Eliteserien", "country": "NORVEÇ"},
     {"lig_id": 30, "name": "Allsvenskan", "comp_id": 29, "url_name": "Allsvenskan", "country": "İSVEÇ"},
+    # Alman Alt Ligleri
+    {"lig_id": 31, "name": "2. Bundesliga", "comp_id": 33, "url_name": "2-Bundesliga", "country": "ALMANYA"},
+    {"lig_id": 32, "name": "3. Liga", "comp_id": 59, "url_name": "3-Liga", "country": "ALMANYA"},
 ]
 
 SEASON = "2025-2026"
@@ -46,7 +49,6 @@ SEZON_ID = 4
 # Summary tablosu mapping
 SUMMARY_MAPPING = {
     'shirtnumber': 'FORMA_NO',
-    'nationality': 'ULKE',
     'position': 'POZISYON',
     'age': 'YAS',
     'minutes': 'SURE',
@@ -68,14 +70,14 @@ SUMMARY_MAPPING = {
     'interceptions': 'MUDAHALE',
     'blocks': 'BLOK',
     'fouls': 'FAUL_YAPILAN',
-    'fouled': 'FAUL_MARUZ',
+    'fouled': 'FAUL_ALINAN',
     'offsides': 'OFSAYT',
     'crosses': 'ORTA',
 }
 
 INT_FIELDS = ['FORMA_NO', 'SURE', 'GOL', 'ASIST', 'PENALTI_GOL', 'PENALTI_ATISI',
               'SUT', 'ISABETLI_SUT', 'SARI_KART', 'KIRMIZI_KART', 'FAUL_YAPILAN',
-              'FAUL_MARUZ', 'OFSAYT', 'ORTA', 'TEMAS', 'TOP_KAPMA', 'MUDAHALE',
+              'FAUL_ALINAN', 'OFSAYT', 'ORTA', 'TEMAS', 'TOP_KAPMA', 'MUDAHALE',
               'BLOK', 'SUT_YARATAN_AKSIYON', 'GOL_YARATAN_AKSIYON']
 
 DECIMAL_FIELDS = ['BEKLENEN_GOL', 'PENALTISIZ_XG', 'BEKLENEN_ASIST']
@@ -167,16 +169,19 @@ def create_fikstur(conn, match_data, lig_id):
     if row:
         return row[0]
 
+    # Skor formatla (ornegin: "2-1")
+    skor = None
+    if match_data.get('home_score') is not None and match_data.get('away_score') is not None:
+        skor = f"{match_data['home_score']}-{match_data['away_score']}"
+
     cursor.execute("""
         INSERT INTO FIKSTUR.FIKSTUR (
-            LIG_ID, SEZON_ID, EV_TAKIM_ID, DEP_TAKIM_ID,
-            MAC_TARIHI, EV_SKOR, DEP_SKOR, URL, KAYIT_TARIHI
+            LIG_ID, EVSAHIBI, MISAFIR, SKOR, TARIH, URL, KAYIT_TARIHI, DURUM
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, GETDATE())
+        VALUES (?, ?, ?, ?, ?, ?, GETDATE(), 1)
     """,
-        lig_id, SEZON_ID, match_data['home_team_id'], match_data['away_team_id'],
-        match_data.get('date'), match_data.get('home_score'), match_data.get('away_score'),
-        match_data['url']
+        lig_id, match_data.get('home_team'), match_data.get('away_team'),
+        skor, match_data.get('date'), match_data['url']
     )
     conn.commit()
     cursor.execute("SELECT @@IDENTITY")
@@ -302,7 +307,7 @@ def save_performans(conn, fikstur_id, oyuncu_id, takim_id, stats):
     columns = ['FIKSTURID', 'OYUNCU_ID', 'TAKIM_ID', 'KAYIT_TARIHI']
     values = [fikstur_id, oyuncu_id, takim_id, datetime.now()]
 
-    for col in INT_FIELDS + DECIMAL_FIELDS + ['POZISYON', 'YAS', 'ULKE']:
+    for col in INT_FIELDS + DECIMAL_FIELDS + ['POZISYON', 'YAS']:
         if col in stats and stats[col] is not None:
             columns.append(col)
             values.append(stats[col])
@@ -409,6 +414,8 @@ def process_match(conn, match, lig_id, ulke):
 
     match_data = {
         'url': match['url'],
+        'home_team': match['home_team'],
+        'away_team': match['away_team'],
         'home_team_id': home_team_id,
         'away_team_id': away_team_id,
         'home_score': home_score,

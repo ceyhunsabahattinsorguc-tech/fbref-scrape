@@ -29,7 +29,7 @@ st.set_page_config(
 )
 
 def get_db_config():
-    """Get database configuration"""
+    """Get database configuration from st.secrets"""
     try:
         db = st.secrets["database"]
         return {
@@ -39,14 +39,21 @@ def get_db_config():
             'user': db['username'],
             'password': db['password']
         }
-    except:
-        return {
-            'server': '195.201.146.224',
-            'port': 1433,
-            'database': 'FBREF',
-            'user': 'sa',
-            'password': 'FbRef2024Str0ng'
-        }
+    except Exception as e:
+        # Local development: check for .streamlit/secrets.toml
+        import os
+        secrets_path = os.path.join(os.path.dirname(__file__), '.streamlit', 'secrets.toml')
+        if not os.path.exists(secrets_path):
+            st.error("Veritabani yapilandirmasi bulunamadi!")
+            st.info("Lutfen .streamlit/secrets.toml dosyasini olusturun veya Streamlit Cloud'da Secrets ekleyin.")
+            st.code("""[database]
+server = "sunucu_adresi,port"
+database = "veritabani_adi"
+username = "kullanici_adi"
+password = "sifre"
+""", language="toml")
+            return None
+        raise e
 
 # Tüm ligler
 FULL_STATS_LEAGUES = [
