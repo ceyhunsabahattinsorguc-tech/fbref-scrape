@@ -91,6 +91,8 @@ SUMMARY_LEAGUES = [
 def get_db_connection():
     """Get database connection using pymssql or pyodbc"""
     config = get_db_config()
+    if config is None:
+        return None
     if USE_PYMSSQL:
         return pymssql.connect(
             server=config['server'],
@@ -114,6 +116,8 @@ def get_table_stats():
     """Tablo istatistiklerini getir"""
     try:
         conn = get_db_connection()
+        if conn is None:
+            return {"error": "Veritabani baglantisi yapilanamadi"}
         cursor = conn.cursor()
 
         stats = {}
@@ -140,6 +144,8 @@ def get_league_match_counts():
     """Her lig için maç sayısını getir"""
     try:
         conn = get_db_connection()
+        if conn is None:
+            return {}
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -273,7 +279,10 @@ def main():
 
         st.subheader("Veritabani Baglantisi")
         config = get_db_config()
-        st.code(f"Server: {config['server']}:{config['port']}\nDatabase: {config['database']}\nUser: {config['user']}\nDriver: {'pymssql' if USE_PYMSSQL else 'pyodbc'}")
+        if config:
+            st.code(f"Server: {config['server']}:{config['port']}\nDatabase: {config['database']}\nUser: {config['user']}\nDriver: {'pymssql' if USE_PYMSSQL else 'pyodbc'}")
+        else:
+            st.warning("Veritabani yapilandirmasi bulunamadi")
 
         st.subheader("Sezon")
         st.text("2025-2026")

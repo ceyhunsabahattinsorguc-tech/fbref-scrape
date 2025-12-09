@@ -46,6 +46,8 @@ def get_db_config():
 
 def get_db_connection():
     config = get_db_config()
+    if config is None:
+        return None
     if USE_PYMSSQL:
         return pymssql.connect(
             server=config['server'],
@@ -122,6 +124,9 @@ def main():
     # Database connection and data
     try:
         conn = get_db_connection()
+        if conn is None:
+            st.error("Veritabani baglantisi yapilanamadi!")
+            return
         cursor = conn.cursor()
 
         # Check if view exists
