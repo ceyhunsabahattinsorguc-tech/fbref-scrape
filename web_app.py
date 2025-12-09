@@ -50,36 +50,36 @@ password = "sifre"
 """, language="toml")
         return None
 
-# Tüm ligler
+# Tum ligler
 FULL_STATS_LEAGUES = [
-    {"lig_id": 6, "name": "Premier League", "country": "İngiltere", "type": "full"},
-    {"lig_id": 7, "name": "La Liga", "country": "İspanya", "type": "full"},
-    {"lig_id": 8, "name": "Serie A", "country": "İtalya", "type": "full"},
+    {"lig_id": 6, "name": "Premier League", "country": "Ingiltere", "type": "full"},
+    {"lig_id": 7, "name": "La Liga", "country": "Ispanya", "type": "full"},
+    {"lig_id": 8, "name": "Serie A", "country": "Italya", "type": "full"},
     {"lig_id": 9, "name": "Ligue 1", "country": "Fransa", "type": "full"},
     {"lig_id": 10, "name": "Bundesliga", "country": "Almanya", "type": "full"},
     {"lig_id": 11, "name": "Eredivisie", "country": "Hollanda", "type": "full"},
     {"lig_id": 12, "name": "Primeira Liga", "country": "Portekiz", "type": "full"},
     {"lig_id": 14, "name": "Brazilian Serie A", "country": "Brezilya", "type": "full"},
-    {"lig_id": 15, "name": "Championship", "country": "İngiltere", "type": "full"},
-    {"lig_id": 17, "name": "First Division A", "country": "Belçika", "type": "full"},
+    {"lig_id": 15, "name": "Championship", "country": "Ingiltere", "type": "full"},
+    {"lig_id": 17, "name": "First Division A", "country": "Belcika", "type": "full"},
 ]
 
 SUMMARY_LEAGUES = [
-    {"lig_id": 4, "name": "Süper Lig", "country": "Türkiye", "type": "summary"},
-    {"lig_id": 13, "name": "Scottish Premiership", "country": "İskoçya", "type": "summary"},
+    {"lig_id": 4, "name": "Super Lig", "country": "Turkiye", "type": "summary"},
+    {"lig_id": 13, "name": "Scottish Premiership", "country": "Iskocya", "type": "summary"},
     {"lig_id": 16, "name": "Austrian Bundesliga", "country": "Avusturya", "type": "summary"},
     {"lig_id": 18, "name": "Superliga", "country": "Danimarka", "type": "summary"},
     {"lig_id": 19, "name": "Champions League", "country": "Avrupa", "type": "summary"},
     {"lig_id": 20, "name": "Europa League", "country": "Avrupa", "type": "summary"},
     {"lig_id": 21, "name": "Europa Conference League", "country": "Avrupa", "type": "summary"},
-    {"lig_id": 22, "name": "Serbian SuperLiga", "country": "Sırbistan", "type": "summary"},
-    {"lig_id": 23, "name": "Swiss Super League", "country": "İsviçre", "type": "summary"},
+    {"lig_id": 22, "name": "Serbian SuperLiga", "country": "Sirbistan", "type": "summary"},
+    {"lig_id": 23, "name": "Swiss Super League", "country": "Isvicre", "type": "summary"},
     {"lig_id": 24, "name": "Ekstraklasa", "country": "Polonya", "type": "summary"},
     {"lig_id": 25, "name": "Super League Greece", "country": "Yunanistan", "type": "summary"},
-    {"lig_id": 26, "name": "Czech First League", "country": "Çekya", "type": "summary"},
+    {"lig_id": 26, "name": "Czech First League", "country": "Cekya", "type": "summary"},
     {"lig_id": 28, "name": "Veikkausliiga", "country": "Finlandiya", "type": "summary"},
-    {"lig_id": 29, "name": "Eliteserien", "country": "Norveç", "type": "summary"},
-    {"lig_id": 30, "name": "Allsvenskan", "country": "İsveç", "type": "summary"},
+    {"lig_id": 29, "name": "Eliteserien", "country": "Norvec", "type": "summary"},
+    {"lig_id": 30, "name": "Allsvenskan", "country": "Isvec", "type": "summary"},
 ]
 
 
